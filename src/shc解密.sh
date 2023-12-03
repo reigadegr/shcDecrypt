@@ -1,7 +1,8 @@
 #!/system/bin/sh
-shcfile=$(pwd)/service.sh.x
+shcfile=$(pwd)/iris_helper
+chmod +x $shcfile
 nohup $shcfile >$(pwd)/log.log 2>&1 &
-m=$(ps -ef | grep "$shcfile" | grep -v grep| awk '{print $2}')
-m2=$(ps -ef | grep "$shcfile" | grep -v grep| awk '{print $3}')
-cat /proc/$m/cmdline > shc解密.txt
-cat /proc/$m2/cmdline > shc解密2.txt
+for i in $(pidof $(basename $shcfile)); do
+    cat /proc/$i/cmdline > "$(pwd)/shc解密$i.txt"
+done
+killall -15 $(basename $shcfile)
